@@ -15,12 +15,18 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-# Overview of the app
+# Overview of the Draw
 
 ![Draw overview](./assets/drawer.png)
 
+# Overview of the login page
+
 ![login page overview](./assets/login_screen.png)
 
+# Overview of the signup page
+
 ![signup page overview](./assets/signup_screen.png)
+
+# Overview of the calculator page
 
 ![calculator page overview](./assets/calculator_screen.png)
