@@ -29,7 +29,7 @@ samples, guidance on mobile development, and a full API reference.
 
 # Things done in this project
 
-> added a toast message to show internet connectivity
-> Used firebase to register and login user into my app
-> Used broadcast receivers to show message to user when battery percentage reaches 90%
-> Used firebase to allow user to login through Google
+1. added a toast message to show internet connectivity
+2. Used firebase to register and login user into my app
+3. Used broadcast receivers to show message to user when battery percentage reaches 90%
+4. Used firebase to allow user to login through Google
