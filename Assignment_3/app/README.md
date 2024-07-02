@@ -27,10 +27,6 @@ samples, guidance on mobile development, and a full API reference.
 
 ![login page](./assets/loginPage.png) ![dashboard page](./assets/dashboard.png)
 
-# Overview of the calculator page
-
-![calculator page overview](./assets/calculator_screen.png)
-
 # Things done in this project
 
 > added a toast message to show internet connectivity
