@@ -1,17 +1,13 @@
 import 'package:app/pages/auth_page.dart';
 import 'package:app/pages/calculator.dart';
 import 'package:app/pages/reg_page.dart';
-import 'package:app/pages/signUp.dart';
-import 'package:app/themes/dark_theme.dart';
-import 'package:app/themes/light_theme.dart';
 import 'package:app/themes/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:app/pages/login.dart';
 import 'package:provider/provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 
 void main() async{
@@ -59,6 +55,23 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     Connectivity _connectivity = Connectivity();
     _subscription = _connectivity.onConnectivityChanged.listen(_showConnectivityToast);
+    defaults();
+  }
+
+  Future<void> defaults() async{
+    _isSwitched = await getIsSwitched();
+    Provider.of<ThemeProvider>(context, listen: false).toggleTheme(_isSwitched);
+  }
+
+  Future<void> setIsSwitched() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('darkTheme', _isSwitched);
+  }
+
+  Future<bool> getIsSwitched() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool? darkTheme = await prefs.getBool('darkTheme');
+    return darkTheme ?? false;
   }
 
   void _showConnectivityToast(List<ConnectivityResult> results) {
@@ -189,6 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     setState(() {
                       _isSwitched = value;
                     });
+                    setIsSwitched();
                     Provider.of<ThemeProvider>(context, listen: false).toggleTheme(_isSwitched);
                   },
                 )

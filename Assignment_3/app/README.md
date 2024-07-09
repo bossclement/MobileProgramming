@@ -27,6 +27,10 @@ samples, guidance on mobile development, and a full API reference.
 
 ![login page](./assets/loginPage.png) ![dashboard page](./assets/dashboard.png)
 
+# Google authentication Overview
+
+![login page](./assets/googleAuth.png) ![dashboard page](./assets/dashboard.png)
+
 # Things done in this project
 
 1. added a toast message to show internet connectivity
