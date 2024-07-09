@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:app/components/bottomSheet.dart';
 import 'package:app/pages/auth_page.dart';
 import 'package:app/pages/calculator.dart';
+import 'package:app/pages/contact_page.dart';
 import 'package:app/pages/reg_page.dart';
 import 'package:app/themes/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
     AuthPage(),
     RegPage(),
     CalculatorScreen(),
+    ContactPage(),
   ];
 
   var _subscription;
@@ -174,7 +176,13 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.calculate),
             label: context.loc.calc,
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.phone),
+            label: context.loc.phone,
+          ),
         ],
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: Theme.of(context).colorScheme.secondary,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
@@ -277,6 +285,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.pop(context);
                 setState(() {
                   _selectedIndex = 2;
+                });
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.phone),
+              title: Text(context.loc.phone),
+              onTap: () {
+                Navigator.pop(context);
+                setState(() {
+                  _selectedIndex = 3;
                 });
               },
             ),

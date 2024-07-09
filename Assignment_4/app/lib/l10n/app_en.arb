@@ -13,5 +13,6 @@
     "connectedTo": "Connected To Mobile Network",
     "noInter": "No internet connection",
     "unkown": "Network status unknown",
-    "wifi": "Connected to WiFi"
+    "wifi": "Connected to WiFi",
+    "phone": "phone"
 }

@@ -13,5 +13,6 @@
     "connectedTo": "uri kuri bundle",
     "noInter": "Nta interineti ufite",
     "unkown": "Interineti ntigaragara",
-    "wifi": "Uri kuri WiFi"
+    "wifi": "Uri kuri WiFi",
+    "phone": "phone"
 }
