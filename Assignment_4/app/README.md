@@ -17,4 +17,4 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 # Overvideo of profile picture feature
-[Watch the Video](assets/video.mp4)
+![profile picture](./assets/video.gif) 
