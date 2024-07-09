@@ -1,14 +1,22 @@
+import 'dart:io';
+
+import 'package:app/components/bottomSheet.dart';
 import 'package:app/pages/auth_page.dart';
 import 'package:app/pages/calculator.dart';
 import 'package:app/pages/reg_page.dart';
 import 'package:app/themes/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
+
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:app/l10n/l10n.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,10 +31,24 @@ void main() async{
   );
 }
 
+extension LocalizationExtension on BuildContext {
+  AppLocalizations get loc {
+    return AppLocalizations.of(this)!;
+  }
+}
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      supportedLocales: L10n.all,
+      locale: const Locale('en'),
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       theme: Provider.of<ThemeProvider>(context).themeData,
       home: MyHomePage(),
     );
@@ -41,6 +63,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   bool _isSwitched = false;
+  File? _selectedImage;
 
   static final List<Widget> _widgetOptions = <Widget>[
     AuthPage(),
@@ -116,6 +139,20 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future selectImage() async{
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    setState(() {
+      _selectedImage = image != null ? File(image.path) : _selectedImage;
+    });
+  }
+
+  Future takePhoto() async{
+    final image = await ImagePicker().pickImage(source: ImageSource.camera);
+    setState(() {
+      _selectedImage = image != null ? File(image.path) : _selectedImage;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,15 +164,15 @@ class _MyHomePageState extends State<MyHomePage> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.login),
-            label: 'Sign In',
+            label: context.loc.signIn,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.app_registration),
-            label: 'Sign Up',
+            label: context.loc.signUp,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calculate),
-            label: 'Calculator',
+            label: context.loc.calc,
           ),
         ],
         currentIndex: _selectedIndex,
@@ -158,28 +195,33 @@ class _MyHomePageState extends State<MyHomePage> {
                       children: [
                         Stack(
                           children: [
+                            _selectedImage != null?
                             CircleAvatar(
                               radius: 60,
-                              backgroundImage: AssetImage('assets/images/profile.jpg'),
+                              backgroundImage: FileImage(_selectedImage!),
+                            ) : 
+                            CircleAvatar(
+                              radius: 60,
+                              backgroundColor: Colors.grey[200],
+                              child: Icon(
+                                Icons.person,
+                                size: 60,
+                                color: Colors.grey[800],
+                              ),
                             ),
                             Positioned(
                               bottom: -10,
                               right: 1,
                               child: IconButton(
                                 onPressed: () {
-                                  showBottomSheet(
-                                    context: context, 
-                                    builder: (context) => Container(
-                                      height: 150,
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context).colorScheme.primary
-                                      ),
-                                    ),
+                                  Navigator.push(
+                                    context, 
+                                    MaterialPageRoute(builder: (context) => MyBottomSheet(gallery: selectImage, photo: takePhoto)),
                                   );
                                 },
-                                icon: const Icon(
+                                icon: Icon(
                                   Icons.add_a_photo,
-                                  color: Colors.white,
+                                  color: Theme.of(context).colorScheme.tertiary,
                                   size: 25,
                                 ),
                               )
@@ -210,7 +252,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ListTile(
               leading: const Icon(Icons.login),
-              title: const Text('Sign In'),
+              title: Text(context.loc.signIn),
               onTap: () {
                 Navigator.pop(context);
                 setState(() {
@@ -220,7 +262,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ListTile(
               leading: Icon(Icons.app_registration),
-              title: Text('Sign Up'),
+              title: Text(context.loc.signUp),
               onTap: () {
                 Navigator.pop(context);
                 setState(() {
@@ -230,7 +272,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ListTile(
               leading: Icon(Icons.calculate),
-              title: Text('Calculator'),
+              title: Text(context.loc.calc),
               onTap: () {
                 Navigator.pop(context);
                 setState(() {
@@ -242,7 +284,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  'Dark mode',
+                  context.loc.dark,
                   style: TextStyle(
                     fontSize: 16,
                   ),

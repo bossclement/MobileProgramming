@@ -1,0 +1,17 @@
+{
+    "@@locale": "en",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "calc": "Calculator",
+    "dark": "Dark Mode",
+    "youre": "You're logged in",
+    "weMissedYou": "Welcome Back, We Missed You",
+    "orCont": "Or Continue With",
+    "email": "Email",
+    "password": "Password",
+    "confirmPas": "Confirm Password",
+    "connectedTo": "Connected To Mobile Network",
+    "noInter": "No internet connection",
+    "unkown": "Network status unknown",
+    "wifi": "Connected to WiFi"
+}
