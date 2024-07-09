@@ -145,21 +145,72 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.tertiary,
-                  fontSize: 24,
+            SizedBox(
+              height: 290,
+              child: DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Stack(
+                          children: [
+                            CircleAvatar(
+                              radius: 60,
+                              backgroundImage: AssetImage('assets/images/profile.jpg'),
+                            ),
+                            Positioned(
+                              bottom: -10,
+                              right: 1,
+                              child: IconButton(
+                                onPressed: () {
+                                  showBottomSheet(
+                                    context: context, 
+                                    builder: (context) => Container(
+                                      height: 150,
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context).colorScheme.primary
+                                      ),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.add_a_photo,
+                                  color: Colors.white,
+                                  size: 25,
+                                ),
+                              )
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'John Doe',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.tertiary,
+                            fontSize: 25,
+                          ),
+                        ),
+                        Text(
+                          'JohnDoe@gmail.com',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.tertiary,
+                            fontSize: 14,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                
               ),
             ),
             ListTile(
-              leading: Icon(Icons.login),
-              title: Text('Sign In'),
+              leading: const Icon(Icons.login),
+              title: const Text('Sign In'),
               onTap: () {
                 Navigator.pop(context);
                 setState(() {
