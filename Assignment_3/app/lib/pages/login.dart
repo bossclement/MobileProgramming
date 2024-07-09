@@ -1,7 +1,6 @@
 import 'package:app/components/button.dart';
 import 'package:app/services/google_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:app/components/textField.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,7 +12,14 @@ class LoginScreen extends StatelessWidget {
 
   LoginScreen({super.key});
 
-  signIn() async{
+  void progress(BuildContext context) {
+    showDialog(context: context, builder: (context) {
+      return const Center(child: CircularProgressIndicator());
+    });
+  }
+
+  signIn(BuildContext context) async{
+    progress(context);
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: usernameController.text, password: passwordController.text
@@ -21,16 +27,18 @@ class LoginScreen extends StatelessWidget {
     } catch (e) {
       Fluttertoast.showToast(msg: 'Failed to sign in!', backgroundColor: Colors.red);
     }
-    
+    Navigator.pop(context);
     
   }
 
-  googleSignIn() {
+  googleSignIn() async{
     try {
-      if (GoogleServiceAuth().signInWithGoogle()) {
+      if (await GoogleServiceAuth().signInWithGoogle() != null) {
         Fluttertoast.showToast(msg: 'Log in successful', backgroundColor: Colors.green);
-      };
-      throw Exception('Failed to sign in');
+      } else {
+        throw Exception('Failed to sign in');
+      }
+      
     } catch (e) {
       Fluttertoast.showToast(msg: 'Failed to sign in!', backgroundColor: Colors.red);
     }
@@ -64,7 +72,7 @@ class LoginScreen extends StatelessWidget {
               Textfield(icon: Icon(Icons.lock), controller: usernameController, hintText: 'Username', obscureText: false),
               SizedBox(height: 15),
               Textfield(icon: Icon(Icons.password), controller: passwordController, hintText: 'Password', obscureText: true),
-              CustomButton(onTap: signIn, text: "Sign in"),
+              CustomButton(onTap: () => signIn(context), text: "Sign in"),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [

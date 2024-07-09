@@ -12,19 +12,28 @@ class SignUpScreen extends StatelessWidget {
 
   SignUpScreen({super.key});
 
-  signUp() {
+  void progress(BuildContext context) {
+    showDialog(context: context, builder: (context) {
+      return const Center(child: CircularProgressIndicator());
+    });
+  }
+
+  signUp(BuildContext context) async {
+    progress(context);
     try {
       // validate inputs
 
-      FirebaseAuth.instance.createUserWithEmailAndPassword(email: usernameController.text, password: passwordController.text);
-      FirebaseAuth.instance.signInWithEmailAndPassword(email: usernameController.text, password: passwordController.text);
-      if (FirebaseAuth.instance.currentUser == null) {
+      UserCredential data = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: usernameController.text, password: passwordController.text);
+
+      if (data.user == null) {
         throw Exception('failed to register');
       }
+      
       Fluttertoast.showToast(msg: 'Registration successful', backgroundColor: Colors.green);
     }catch (e){
       Fluttertoast.showToast(msg: 'Failed to register', backgroundColor: Colors.red);
     }
+    Navigator.pop(context);
   }
 
   googleSignUp() {
@@ -60,7 +69,7 @@ class SignUpScreen extends StatelessWidget {
               Textfield(icon: Icon(Icons.password), controller: passwordController, hintText: 'Password', obscureText: true),
               SizedBox(height: 15),
               Textfield(icon: Icon(Icons.password), controller: confirmpasswordController, hintText: 'Confirm Password', obscureText: true),
-              CustomButton(onTap: signUp, text: "Sign up"),
+              CustomButton(onTap: () => signUp(context), text: "Sign up"),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
