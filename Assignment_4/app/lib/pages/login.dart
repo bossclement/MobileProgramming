@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:app/components/textField.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class LoginScreen extends StatelessWidget {
@@ -25,22 +26,22 @@ class LoginScreen extends StatelessWidget {
         email: usernameController.text, password: passwordController.text
       );
     } catch (e) {
-      Fluttertoast.showToast(msg: 'Failed to sign in!', backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.failedSign, backgroundColor: Colors.red);
     }
     Navigator.pop(context);
     
   }
 
-  googleSignIn() async{
+  googleSignIn(BuildContext context) async{
     try {
       if (await GoogleServiceAuth().signInWithGoogle() != null) {
-        Fluttertoast.showToast(msg: 'Log in successful', backgroundColor: Colors.green);
+        Fluttertoast.showToast(msg: AppLocalizations.of(context)!.loginSuc, backgroundColor: Colors.green);
       } else {
-        throw Exception('Failed to sign in');
+        throw Exception(AppLocalizations.of(context)!.failedSign);
       }
       
     } catch (e) {
-      Fluttertoast.showToast(msg: 'Failed to sign in!', backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.failedSign, backgroundColor: Colors.red);
     }
     
   }
@@ -60,7 +61,7 @@ class LoginScreen extends StatelessWidget {
               ),
               SizedBox(height: 30),
               Text(
-                'Welcome Back, we missed you',
+                AppLocalizations.of(context)!.weMissedYou,
                 style: TextStyle(
                   fontSize: 12,
                   decoration: TextDecoration.none,
@@ -69,10 +70,10 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 30),
-              Textfield(icon: Icon(Icons.lock), controller: usernameController, hintText: 'Username', obscureText: false),
+              Textfield(icon: Icon(Icons.lock), controller: usernameController, hintText: AppLocalizations.of(context)!.email, obscureText: false),
               SizedBox(height: 15),
-              Textfield(icon: Icon(Icons.password), controller: passwordController, hintText: 'Password', obscureText: true),
-              CustomButton(onTap: () => signIn(context), text: "Sign in"),
+              Textfield(icon: Icon(Icons.password), controller: passwordController, hintText: AppLocalizations.of(context)!.password, obscureText: true),
+              CustomButton(onTap: () => signIn(context), text: AppLocalizations.of(context)!.signIn),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -80,7 +81,7 @@ class LoginScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text(
-                      'Or continue with',
+                      AppLocalizations.of(context)!.orCont,
                       style: TextStyle(
                         fontSize: 15,
                         decoration: TextDecoration.none,
@@ -95,7 +96,7 @@ class LoginScreen extends StatelessWidget {
               ),
               Center(
                 child: GestureDetector(
-                  onTap: googleSignIn,
+                  onTap: () => googleSignIn(context),
                   child: Container(
                     margin: EdgeInsets.symmetric(vertical: 30),
                     padding: EdgeInsets.all(8),

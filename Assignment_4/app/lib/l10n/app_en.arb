@@ -14,5 +14,11 @@
     "noInter": "No internet connection",
     "unkown": "Network status unknown",
     "wifi": "Connected to WiFi",
-    "phone": "phone"
+    "phone": "phone",
+    "loginSuc": "Log in successful",
+    "failedSign": "Failed to sign in",
+    "appTitle": "My App",
+    "happyTo": "Welcome, happy to have you here",
+    "failedReg": "Failed to register!",
+    "regSuccess": "Registration successful"
 }

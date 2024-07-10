@@ -14,10 +14,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
-
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:app/l10n/l10n.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,33 +29,42 @@ void main() async{
   );
 }
 
-extension LocalizationExtension on BuildContext {
-  AppLocalizations get loc {
-    return AppLocalizations.of(this)!;
-  }
+
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+
 }
 
-class MyApp extends StatelessWidget {
+class _MyAppState extends State<MyApp> {
+  Locale locale = Locale('en');
+
+  void _changeLanguage(Locale locale) {
+    setState(() {
+      this.locale = locale;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      supportedLocales: L10n.all,
-      locale: const Locale('en'),
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: this.locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       theme: Provider.of<ThemeProvider>(context).themeData,
-      home: MyHomePage(),
+      home: MyHomePage(onLocaleChange: _changeLanguage),
     );
   }
 }
 
+// ignore: must_be_immutable
 class MyHomePage extends StatefulWidget {
+  late Function(Locale) onLocaleChange;
+
+  MyHomePage({required this.onLocaleChange});
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState(onLocaleChange: onLocaleChange);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -74,6 +80,10 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   var _subscription;
+
+  late Function(Locale) onLocaleChange;
+
+  _MyHomePageState({required this.onLocaleChange});
 
   @override
   void initState() {
@@ -105,19 +115,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
     switch (results[0]) {
       case ConnectivityResult.wifi:
-        message = "Connected to WiFi";
+        message = AppLocalizations.of(context)!.wifi;
         bgColor = Colors.green;
         break;
       case ConnectivityResult.mobile:
-        message = "Connected to Mobile Network";
+        message = AppLocalizations.of(context)!.connectedTo;
         bgColor = Colors.blue;
         break;
       case ConnectivityResult.none:
-        message = "No Internet Connection";
+        message = AppLocalizations.of(context)!.noInter;
         bgColor = Colors.red;
         break;
       default:
-        message = "Network status unknown";
+        message = AppLocalizations.of(context)!.unkown;
         bgColor = Colors.orange;
     }
 
@@ -159,26 +169,46 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My App'),
+        title: Text(AppLocalizations.of(context)!.appTitle),
+        actions: [
+          DropdownButton<Locale>(
+            icon: Icon(Icons.language, color: Theme.of(context).colorScheme.primary),
+            onChanged: (Locale? locale) {
+              if (locale != null) {
+                onLocaleChange(locale);
+              }
+            },
+            items: [
+              DropdownMenuItem(
+                value: Locale('en'),
+                child: Text('English'),
+              ),
+              DropdownMenuItem(
+                value: Locale('fr'),
+                child: Text('Français'),
+              ),
+            ],
+          ),
+        ],
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.login),
-            label: context.loc.signIn,
+            label: AppLocalizations.of(context)!.signIn,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.app_registration),
-            label: context.loc.signUp,
+            label: AppLocalizations.of(context)!.signUp,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calculate),
-            label: context.loc.calc,
+            label: AppLocalizations.of(context)!.calc,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.phone),
-            label: context.loc.phone,
+            label: AppLocalizations.of(context)!.phone,
           ),
         ],
         selectedItemColor: Theme.of(context).colorScheme.primary,
@@ -260,7 +290,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ListTile(
               leading: const Icon(Icons.login),
-              title: Text(context.loc.signIn),
+              title: Text(AppLocalizations.of(context)!.signIn),
               onTap: () {
                 Navigator.pop(context);
                 setState(() {
@@ -270,7 +300,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ListTile(
               leading: Icon(Icons.app_registration),
-              title: Text(context.loc.signUp),
+              title: Text(AppLocalizations.of(context)!.signUp),
               onTap: () {
                 Navigator.pop(context);
                 setState(() {
@@ -280,7 +310,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ListTile(
               leading: Icon(Icons.calculate),
-              title: Text(context.loc.calc),
+              title: Text(AppLocalizations.of(context)!.calc),
               onTap: () {
                 Navigator.pop(context);
                 setState(() {
@@ -290,7 +320,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ListTile(
               leading: Icon(Icons.phone),
-              title: Text(context.loc.phone),
+              title: Text(AppLocalizations.of(context)!.phone),
               onTap: () {
                 Navigator.pop(context);
                 setState(() {
@@ -302,7 +332,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  context.loc.dark,
+                  AppLocalizations.of(context)!.dark,
                   style: TextStyle(
                     fontSize: 16,
                   ),

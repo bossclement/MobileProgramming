@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:app/components/textField.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 class SignUpScreen extends StatelessWidget {
@@ -26,12 +27,12 @@ class SignUpScreen extends StatelessWidget {
       UserCredential data = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: usernameController.text, password: passwordController.text);
 
       if (data.user == null) {
-        throw Exception('failed to register');
+        throw Exception(AppLocalizations.of(context)!.failedReg);
       }
       
-      Fluttertoast.showToast(msg: 'Registration successful', backgroundColor: Colors.green);
+      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.regSuccess, backgroundColor: Colors.green);
     }catch (e){
-      Fluttertoast.showToast(msg: 'Failed to register', backgroundColor: Colors.red);
+      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.failedReg, backgroundColor: Colors.red);
     }
     Navigator.pop(context);
   }
@@ -55,7 +56,7 @@ class SignUpScreen extends StatelessWidget {
               ),
               SizedBox(height: 30),
               Text(
-                'Welcome, happy to have you here',
+                AppLocalizations.of(context)!.happyTo,
                 style: TextStyle(
                   fontSize: 12,
                   decoration: TextDecoration.none,
@@ -64,12 +65,12 @@ class SignUpScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 30),
-              Textfield(icon: Icon(Icons.lock), controller: usernameController, hintText: 'Username', obscureText: false),
+              Textfield(icon: Icon(Icons.lock), controller: usernameController, hintText: AppLocalizations.of(context)!.email, obscureText: false),
               SizedBox(height: 15),
-              Textfield(icon: Icon(Icons.password), controller: passwordController, hintText: 'Password', obscureText: true),
+              Textfield(icon: Icon(Icons.password), controller: passwordController, hintText: AppLocalizations.of(context)!.password, obscureText: true),
               SizedBox(height: 15),
-              Textfield(icon: Icon(Icons.password), controller: confirmpasswordController, hintText: 'Confirm Password', obscureText: true),
-              CustomButton(onTap: () => signUp(context), text: "Sign up"),
+              Textfield(icon: Icon(Icons.password), controller: confirmpasswordController, hintText: AppLocalizations.of(context)!.confirmPas, obscureText: true),
+              CustomButton(onTap: () => signUp(context), text: AppLocalizations.of(context)!.signIn),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -77,7 +78,7 @@ class SignUpScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Text(
-                      'Or continue with',
+                      AppLocalizations.of(context)!.orCont,
                       style: TextStyle(
                         fontSize: 15,
                         decoration: TextDecoration.none,
