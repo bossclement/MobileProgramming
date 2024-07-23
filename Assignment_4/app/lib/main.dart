@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:app/components/bottomSheet.dart';
 import 'package:app/pages/auth_page.dart';
 import 'package:app/pages/calculator.dart';
