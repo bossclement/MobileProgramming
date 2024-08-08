@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:convert';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:app/main.dart';
+import 'package:app/services/notification_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -40,21 +41,11 @@ class _MymapState extends State<Mymap> {
       false);
     locName = inSelectedArea ? 'Inside Boundaries!' : 'Outside Boundaries!';
     if (!inSelectedArea) {
-      final snackBar = SnackBar(
-        elevation: 0,
-        padding: EdgeInsets.symmetric(vertical: 20),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'On Snap!',
-          message: 'You got outside of the bounderies, get back in quick!',
-          contentType: ContentType.failure,
-        ),
+      NotificationService.showBigTextNotification(
+          title: 'Geofencing',
+          body: 'You got outside the boundaries!',
+          fln: flutterLocalNotificationsPlugin
       );
-
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(snackBar);
     }
     
     currentPosition = pointLatLng;
